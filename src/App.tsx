@@ -2,6 +2,8 @@ import { Canvas } from '@react-three/fiber';
 import './App.css'
 import { Float, PerspectiveCamera, StatsGl } from '@react-three/drei';
 import { Suspense } from 'react';
+import { BlobMaterial } from './BlobMaterial';
+import * as THREE from "three";
 
 function GlobalScene(){
   return  <>
@@ -13,7 +15,8 @@ function GlobalScene(){
       <Float rotationIntensity={10}>
         <mesh>
           <boxGeometry/>
-          <meshStandardMaterial color="orange"/>
+          <BlobMaterial color={new THREE.Color(0xff00ff)}/>
+          {/* <meshStandardMaterial color="orange"/> */}
         </mesh>
       </Float>
     </Suspense>
