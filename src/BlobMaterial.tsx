@@ -51,18 +51,7 @@ float randomFloat(inout uint seed)
 {
   return float(wang_hash(seed)) / 4294967296.;
 }
-vec2 hitBox( vec3 orig, vec3 dir ) {
-  const vec3 box_min = vec3( - 0.5 );
-  const vec3 box_max = vec3( 0.5 );
-  vec3 inv_dir = 1.0 / dir;
-  vec3 tmin_tmp = ( box_min - orig ) * inv_dir;
-  vec3 tmax_tmp = ( box_max - orig ) * inv_dir;
-  vec3 tmin = min( tmin_tmp, tmax_tmp );
-  vec3 tmax = max( tmin_tmp, tmax_tmp );
-  float t0 = max( tmin.x, max( tmin.y, tmin.z ) );
-  float t1 = min( tmax.x, min( tmax.y, tmax.z ) );
-  return vec2( t0, t1 );
-}
+
 float smoothMin(float d1, float d2, float k){
   float h = exp(-k * d1) + exp(-k * d2);
   return -log(h) / k;
@@ -98,13 +87,8 @@ vec3 getNormal(vec3 p){
 
 void main(){
   vec3 rayDir = normalize( vDirection );
-  vec2 bounds = hitBox( vOrigin, rayDir );
 
-  if ( bounds.x > bounds.y ) discard;
-
-  bounds.x = max( bounds.x, 0.0 );
-
-  vec3 p = vOrigin + bounds.x * rayDir;
+  vec3 p = vOrigin;
   vec3 inc = 1.0 / abs( rayDir );
   float distance = 9999.0;
   float delta = 1.0;
@@ -142,6 +126,7 @@ class BlobMaterialImpl extends ShaderMaterial{
       vertexShader:VERTEX_SHADER,
       fragmentShader:FRAGMENT_SHADER,
     });
+    this.transparent=true;
     // this.side=THREE.DoubleSide;
     this._time={value:0};
     this._color={value:new THREE.Color()};
