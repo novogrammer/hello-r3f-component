@@ -29,6 +29,9 @@ varying vec2 vUv;
 uniform float time;
 uniform vec3 color;
 void main(){
+  if(0.5<length(vUv - vec2(0.5))){
+    discard;
+  }
   gl_FragColor=vec4(color,1.0);
 }
 
@@ -45,6 +48,7 @@ class BlobMaterialImpl extends ShaderMaterial{
       vertexShader:VERTEX_SHADER,
       fragmentShader:FRAGMENT_SHADER,
     });
+    // this.side=THREE.DoubleSide;
     this._time={value:0};
     this._color={value:new THREE.Color()};
     if(color!==undefined){
