@@ -5,7 +5,7 @@ export class MeshTransparentVideoMaterial extends THREE.MeshBasicMaterial{
     super(parameters);
     this.transparent=true;
     this.onBeforeCompile=(shader)=>{
-      console.log("onBeforeCompile");
+      // console.log("onBeforeCompile");
       shader.vertexShader=shader.vertexShader.replace('#include <uv_vertex>',
 `
 #include <uv_vertex>
@@ -22,7 +22,7 @@ diffuseColor.a = texture2D( map, vec2(vMapUv.x, vMapUv.y - 0.5)).r;
 #endif
 `
       );
-      console.log(shader.fragmentShader);
+      // console.log(shader.fragmentShader);
     };
   }
 }
