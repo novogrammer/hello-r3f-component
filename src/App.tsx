@@ -23,7 +23,7 @@ function GlobalScene(){
           {/* <meshStandardMaterial color="orange"/> */}
         </mesh>
         <mesh position={[0,0,-1]}>
-          <boxGeometry args={[1,1,1]}/>
+          <planeGeometry args={[2,2]}/>
           <meshStandardMaterial color="white"/>
         </mesh>
         <mesh position={[-1,0,0]}>
