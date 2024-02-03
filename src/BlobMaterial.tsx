@@ -1,19 +1,18 @@
-import * as React from "react";
-import * as THREE from "three";
-import {ShaderMaterial} from "three";
-import { /*ReactThreeFiber,*/ useFrame } from "@react-three/fiber";
-import { ForwardRefComponent } from "@react-three/drei/helpers/ts-utils";
+import * as React from 'react';
+import * as THREE from 'three';
+import {ShaderMaterial} from 'three';
+import {/* ReactThreeFiber, */ useFrame} from '@react-three/fiber';
+import {type ForwardRefComponent} from '@react-three/drei/helpers/ts-utils';
 
-
-interface Uniform<T>{
+type Uniform<T> = {
   value: T;
-}
+};
 
-interface BlobMaterialImplParams{
-  color?:THREE.ColorRepresentation;
-}
+type BlobMaterialImplParameters = {
+  color?: THREE.ColorRepresentation;
+};
 
-const VERTEX_SHADER=`
+const VERTEX_SHADER = `
 varying vec2 vUv;
 varying vec3 vOrigin;
 varying vec3 vDirection;
@@ -30,7 +29,7 @@ void main()	{
 
 }
 `;
-const FRAGMENT_SHADER=`
+const FRAGMENT_SHADER = `
 varying vec2 vUv;
 varying vec3 vOrigin;
 varying vec3 vDirection;
@@ -115,56 +114,64 @@ void main(){
 
 `;
 
-class BlobMaterialImpl extends ShaderMaterial{
-  _time:Uniform<number>;
-  _color:Uniform<THREE.Color>;
+class BlobMaterialImpl extends ShaderMaterial {
+  _time: Uniform<number>;
+  _color: Uniform<THREE.Color>;
 
-  constructor({color}:BlobMaterialImplParams){
+  constructor({color}: BlobMaterialImplParameters) {
     super({
-      uniforms:{
-      },
-      vertexShader:VERTEX_SHADER,
-      fragmentShader:FRAGMENT_SHADER,
+      uniforms: {},
+      vertexShader: VERTEX_SHADER,
+      fragmentShader: FRAGMENT_SHADER,
     });
-    this.transparent=true;
+    this.transparent = true;
     // this.side=THREE.DoubleSide;
-    this._time={value:0};
-    this._color={value:new THREE.Color()};
-    if(color!==undefined){
-      this._color.value=new THREE.Color(color);
+    this._time = {value: 0};
+    this._color = {value: new THREE.Color()};
+    if (color !== undefined) {
+      this._color.value = new THREE.Color(color);
     }
-    this.uniforms={
-      time:this._time,
-      color:this._color,
-    }
+
+    this.uniforms = {
+      time: this._time,
+      color: this._color,
+    };
   }
-  get time(){
+
+  get time() {
     return this._time.value;
   }
-  set time(v){
-    this._time.value=v;
+
+  set time(v) {
+    this._time.value = v;
   }
-  get color(){
+
+  get color() {
     return this._color.value;
   }
-  set color(v){
-    this._color.value=v;
+
+  set color(v) {
+    this._color.value = v;
   }
 }
 
-interface Props{
-  color:THREE.ColorRepresentation;
-}
+type Props = {
+  readonly color: THREE.ColorRepresentation;
+};
 
-export const BlobMaterial: ForwardRefComponent<Props,BlobMaterialImpl>=/* @__PURE__ */ React.forwardRef(({color,...props}:Props,ref)=>{
-  const [material]=React.useState(()=>new BlobMaterialImpl({color}));
+export const BlobMaterial: ForwardRefComponent<Props, BlobMaterialImpl>
+/* @__PURE__ */ = React.forwardRef(({color, ...props}: Props, ref) => {
+  const [material] = React.useState(() => new BlobMaterialImpl({color}));
 
-  useFrame((state)=>{
-    if(!material){
+  useFrame(state => {
+    if (!material) {
       return;
     }
-    material.time=state.clock.getElapsedTime();
+
+    material.time = state.clock.getElapsedTime();
   });
 
-  return <primitive object={material} ref={ref} attach="material" {...props} />;
+  return (
+    <primitive ref={ref} object={material} attach='material' {...props}/>
+  );
 });
